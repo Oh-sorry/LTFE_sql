@@ -1,0 +1,56 @@
+SELECT * FROM hpa100t a ORDER BY a.join_date DESC;
+SELECT * FROM hpa100t a ORDER BY a.retr_date DESC;
+
+--입사--
+SELECT SUBSTRING(a.join_date, 1, 4)AS 연도별, COUNT(a.join_date) AS 입사자
+FROM hpa100t a
+GROUP BY SUBSTRING(a.join_date, 1, 4);
+
+--퇴사
+SELECT SUBSTRING(a.retr_date, 1, 4) AS 연도별, COUNT(a.retr_date) AS 퇴사자
+FROM hpa100t a
+GROUP BY SUBSTRING(a.retr_date, 1, 4);
+
+--SELECT B.연도별2 AS 연도, A.입사자, B.퇴사자
+SELECT
+B.연도별2 AS 연도, A.입사자, B.퇴사자
+	FROM (SELECT SUBSTRING(a.join_date, 1, 4)AS 연도별, COUNT(a.join_date) AS 입사자
+		FROM hpa100t a
+		GROUP BY SUBSTRING(a.join_date, 1, 4)) A,
+	(SELECT SUBSTRING(a.retr_date, 1, 4) AS 연도별2, COUNT(a.retr_date) AS 퇴사자
+		FROM hpa100t a
+		GROUP BY SUBSTRING(a.retr_date, 1, 4)) B
+	WHERE A.연도별=B.연도별2
+;
+
+SELECT SUBSTRING(a.join_date, 1, 4)AS 연도별
+FROM hpa100t a
+GROUP BY SUBSTRING(a.join_date, 1, 4)
+UNION
+SELECT SUBSTRING(a.retr_date, 1, 4) AS 연도별
+FROM hpa100t a
+GROUP BY SUBSTRING(a.retr_date, 1, 4)
+;
+
+
+SELECT * FROM(
+SELECT SUBSTRING(a.join_date, 1, 4)AS 연도별, COUNT(a.join_date) AS 입사자
+FROM hpa100t a
+GROUP BY SUBSTRING(a.join_date, 1, 4))
+INNER JOIN
+(SELECT SUBSTRING(a.retr_date, 1, 4) AS 연도별, COUNT(a.retr_date) AS 퇴사자
+FROM hpa100t a
+GROUP BY SUBSTRING(a.retr_date, 1, 4)) A
+;
+
+--SELECT DISTINCT(A.연도별) AS 연도  FROM
+SELECT * FROM
+	(SELECT SUBSTRING(a.join_date, 1, 4)AS 연도별, COUNT(a.join_date) AS 입사자
+FROM hpa100t a
+GROUP BY SUBSTRING(a.join_date, 1, 4)
+UNION
+SELECT SUBSTRING(a.retr_date, 1, 4) AS 연도별, COUNT(a.retr_date) AS 퇴사자
+FROM hpa100t a
+GROUP BY SUBSTRING(a.retr_date, 1, 4)) A
+
+;
