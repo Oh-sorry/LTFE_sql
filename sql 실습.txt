@@ -1,0 +1,53 @@
+sql 실습
+
+T- 인사 정보
+
+1. 연도별 입/퇴사자 인원수
+
+--입사--
+SELECT SUBSTRING(a.join_date, 1, 4)AS 연도별, COUNT(a.join_date) AS 입사자
+FROM hpa100t a
+GROUP BY SUBSTRING(a.join_date, 1, 4);
+
+
+--퇴사
+SELECT SUBSTRING(a.retr_date, 1, 4) AS 연도별, COUNT(a.retr_date) AS 퇴사자
+FROM hpa100t a
+GROUP BY SUBSTRING(a.retr_date, 1, 4);
+
+--SELECT B.연도별2 AS 연도, A.입사자, B.퇴사자
+SELECT 
+B.연도별2 AS 연도, A.입사자, B.퇴사자
+	FROM (SELECT SUBSTRING(a.join_date, 1, 4)AS 연도별, COUNT(a.join_date) AS 입사자
+		FROM hpa100t a
+		GROUP BY SUBSTRING(a.join_date, 1, 4)) A,
+	(SELECT SUBSTRING(a.retr_date, 1, 4) AS 연도별2, COUNT(a.retr_date) AS 퇴사자
+		FROM hpa100t a
+		GROUP BY SUBSTRING(a.retr_date, 1, 4)) B
+	WHERE A.연도별=B.연도별2
+;
+
+2. 부서별(본부로 기준100***) 재직자 인원수, 퇴직자 인원수, 목록
+
+SELECT COUNT(*) FROM hpa100t b WHERE b.retr_date !='' AND SUBSTR(b.dept_code, 1, 2)= '15';
+
+3. 재직자 기준 가족수 (없으면 0) 목록
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+SELECT
+	B.pern_no AS 사번, B.NAME AS 사원이름, NVL(A.cnt, 0) AS 가족수
+FROM
+	(SELECT a.pern_no, SUM(CASE WHEN a.rel_code IS NOT NULL THEN 1 ELSE 0 END) AS cnt FROM hpa130t a GROUP BY a.pern_no) A,
+	(SELECT b.pern_no, b.name FROM hpa100t b) B
+WHERE B.pern_no=A.pern_no (+)
+;
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+4. 재직자 기준 최종 학력 목록 ( 학력 없으면 x)
+-------------------------------------------------------------------------------------------------------------------------------------------
+SELECT B.사번, B.사원명, NVL(A.전공, ' ') AS 전공, NVL(A.졸업일자, ' ') AS 졸업일자
+FROM
+(SELECT a.pern_no AS 사번, a.gradu_date2 AS 졸업일자, a.special_study AS 전공 FROM hsc100t a GROUP BY a.pern_no) A,
+(SELECT b.pern_no AS 사번, b.NAME AS  사원명 FROM hpa100t b) B
+WHERE A.사번(+)=B.사번
+;-------------------------------------------------------------------------------------------------------------------------------------------
