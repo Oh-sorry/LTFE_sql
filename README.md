@@ -41,4 +41,4 @@ FROM
 (SELECT a.pern_no AS 사번, a.gradu_date2 AS 졸업일자, a.special_study AS 전공 FROM hsc100t a GROUP BY a.pern_no) A,
 (SELECT b.pern_no AS 사번, b.NAME AS  사원명 FROM hpa100t b) B
 WHERE A.사번(+)=B.사번
-;-------------------------------------------------------------------------------------------------------------------------------------------
+;
