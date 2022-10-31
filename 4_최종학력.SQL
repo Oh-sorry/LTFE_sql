@@ -61,49 +61,26 @@ FROM   (SELECT  B.pern_no,
 WHERE  ROW_NO = 1 ;
 ------------------------------------------------수정22------------------------------------------------------------
 SELECT pern_no,
-
        b.detail_code_name,
-
        a.gradu_date1,
-
        a.gradu_date2,
-
        a.sch_name,
-
        c.detail_code_name
-
 FROM   hsc100t a,
-
        bco100t b,
-
        bco100t c
-
 WHERE  (
-
               pern_no, schship_code
-
        )
-
        IN
-
-       ( SELECT  pern_no,
-
+       (SELECT  pern_no,
                 MAX(schship_code)
-
        FROM     hsc100t
-
        WHERE    schship_code NOT IN ('99')
-
        GROUP BY pern_no
-
        )
-
 AND    a.schship_code = b.detail_code
-
 AND    b.com_code     = 'H009'
-
 AND    a.gradu_code   = c.detail_code
-
 AND    c.com_code     = 'H010'
-
 ;
