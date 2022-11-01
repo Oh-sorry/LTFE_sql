@@ -30,4 +30,5 @@ AND
        (
               a.special_study LIKE '%컴퓨터%' OR a.special_study LIKE '%전자%' OR a.special_study LIKE '%통신%' OR a.special_study LIKE '%정보%' OR a.special_study LIKE '%전기%' OR a.special_study LIKE '%전산%' OR a.special_study LIKE '%인터넷%' OR a.special_study LIKE '%프로그래밍%' OR a.special_study LIKE '%소프트웨어%' OR a.special_study LIKE '%미디어%' OR a.special_study LIKE '%디지털%' OR a.special_study LIKE '%게임%'
        ) ;
+
 ------------------------------------------------------------------------------------------------------------------------
